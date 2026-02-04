@@ -1,0 +1,514 @@
+{
+  "info": {
+    "_postman_id": "b0c9a619-9ae7-497c-b0cc-d45ec6d9d7b9",
+    "name": "Hackaton - Insumos",
+    "description": "Collection para API de Gestão de Insumos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43638838",
+    "_collection_link": "https://go.postman.co/collection/43638838-b0c9a619-9ae7-497c-b0cc-d45ec6d9d7b9?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Criar Insumo",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 201', function() {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Response contém ID', function() {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.id).to.not.be.null;",
+              "    pm.environment.set('insumo_id', jsonData.id);",
+              "});",
+              "",
+              "pm.test('Response é um objeto válido', function() {",
+              "    pm.response.to.be.json;",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Esparadrapo Cirúrgico 5cm\",\n  \"descricao\": \"Esparadrapo cirúrgico hipoalergênico 5cm x 10m, rolo\",\n  \"fabricante\": \"Materiais Cirúrgicos XYZ\",\n  \"cnpjFabricante\": \"77788899901234\",\n  \"dataFabricacao\": \"2025-02-01\",\n  \"dataVencimento\": \"2028-02-23\",\n  \"lote\": \"LOT1234\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/insumos/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            ""
+          ]
+        },
+        "description": "POST /insumos - Cria um novo insumo\n\n**Body (InsumoRequestDto):**\n- nome: string, 3-255 caracteres, obrigatório\n- descricao: string, opcional\n- fabricante: string, opcional\n- cnpjFabricante: string, 14 dígitos, opcional\n- dataFabricacao: date (YYYY-MM-DD), opcional\n- dataVencimento: date (YYYY-MM-DD), obrigatório, presente ou futura\n- lote: string, 3-100 caracteres, único, obrigatório\n\n**Response (201 Created):** InsumoResponseDto"
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Insumos (Paginado)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 200', function() {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/insumos/?pagina=2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            ""
+          ],
+          "query": [
+            {
+              "key": "pagina",
+              "value": "2",
+              "description": "Número da página (padrão: 1)"
+            }
+          ]
+        },
+        "description": "GET /insumos - Lista todos os insumos com paginação\n\n**Query Parameters:**\n- pagina: integer, número da página (padrão: 1)\n\n**Response (200 OK):** InsumoPaginacaoResponseDto com lista de InsumoResponseDto"
+      },
+      "response": []
+    },
+    {
+      "name": "Insumo - Buscar por ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 200', function() {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/insumos/{{insumo_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            "{{insumo_id}}"
+          ]
+        },
+        "description": "GET /insumos/{id} - Busca um insumo específico pelo ID\n\n**Path Parameters:**\n- id: UUID, obrigatório\n\n**Response (200 OK):** InsumoResponseDto\n**Response (404):** Insumo não encontrado\n\n**Nota:** Use {{insumo_id}} salvo em variável de ambiente"
+      },
+      "response": []
+    },
+    {
+      "name": "Insumo - Buscar por lote",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 200', function() {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/insumos/lote/LOT002",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            "lote",
+            "LOT002"
+          ]
+        },
+        "description": "GET /insumos/lote/{lote} - Busca insumo pelo número do lote (único)\n\n**Path Parameters:**\n- lote: string, 3-100 caracteres, obrigatório\n\n**Response (200 OK):** InsumoResponseDto\n**Response (404):** Lote não encontrado"
+      },
+      "response": []
+    },
+    {
+      "name": "Listar insumos vencidos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 200', function() {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/insumos/vencidos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            "vencidos"
+          ]
+        },
+        "description": "GET /insumos/vencidos - Lista todos os insumos que já venceram\n\n**Critério:** dataVencimento < hoje\n\n**Response (200 OK):** List<InsumoResponseDto>"
+      },
+      "response": []
+    },
+    {
+      "name": "Listar insumos vencendo em X dias",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 200', function() {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/insumos/vencendo/30",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            "vencendo",
+            "30"
+          ]
+        },
+        "description": "GET /insumos/vencendo/{dias} - Lista insumos que vencem em até X dias\n\n**Path Parameters:**\n- dias: integer, número de dias para verificação, obrigatório\n\n**Critério:** venceEm(dias) = true\n- Inclui insumos que vencem nos próximos X dias\n- Inclui insumos já vencidos\n\n**Response (200 OK):** List<InsumoResponseDto>"
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar insumo por fabricante",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 200', function() {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/insumos/fabricante/Laboratório Farmacêutico XYZ",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            "fabricante",
+            "Laboratório Farmacêutico XYZ"
+          ]
+        },
+        "description": "GET /insumos/fabricante/{fabricante} - Lista insumos de um fabricante\n\n**Path Parameters:**\n- fabricante: string, nome do fabricante, obrigatório\n\n**Response (200 OK):** List<InsumoResponseDto>"
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar insumo por nome",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 200', function() {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/insumos/buscar?nome=Agulha",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            "buscar"
+          ],
+          "query": [
+            {
+              "key": "nome",
+              "value": "Agulha",
+              "description": "Parte do nome do insumo (obrigatório)"
+            }
+          ]
+        },
+        "description": "GET /insumos/buscar - Busca insumos pelo nome (busca parcial com LIKE)\n\n**Query Parameters:**\n- nome: string, termo para busca, obrigatório\n\n**Critério:** nome LIKE '%termo%' (case-insensitive)\n\n**Response (200 OK):** List<InsumoResponseDto>"
+      },
+      "response": []
+    },
+    {
+      "name": "Atualizar insumo",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 200', function() {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Soro Fisiológico 1000ml\",\n  \"descricao\": \"Soro 0,9% para uso intravenoso, estéril e pirogênio-negativo - ATUALIZADO\",\n  \"fabricante\": \"Laboratório Farmacêutico XYZ\",\n  \"cnpjFabricante\": \"12345678901234\",\n  \"dataFabricacao\": \"2024-01-15\",\n  \"dataVencimento\": \"2026-06-15\",\n  \"lote\": \"LOT001\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/insumos/{{insumo_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            "{{insumo_id}}"
+          ]
+        },
+        "description": "PUT /insumos/{id} - Atualiza um insumo existente\n\n**Path Parameters:**\n- id: UUID, obrigatório\n\n**Body (InsumoRequestDto):** Todos os campos devem ser fornecidos\n\n**Response (200 OK):** InsumoResponseDto atualizado\n**Response (404):** Insumo não encontrado\n\n**Nota:** Use {{insumo_id}} salvo em variável de ambiente"
+      },
+      "response": []
+    },
+    {
+      "name": "Deletar insumo",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status é 204 (No Content)', function() {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/insumos/{{insumo_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "insumos",
+            "{{insumo_id}}"
+          ]
+        },
+        "description": "DELETE /insumos/{id} - Deleta um insumo\n\n**Path Parameters:**\n- id: UUID, obrigatório\n\n**Response (204 No Content):** Sucesso, sem body\n**Response (404):** Insumo não encontrado\n\n**Nota:** Use {{insumo_id}} salvo em variável de ambiente"
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8082",
+      "description": "URL base da API"
+    },
+    {
+      "key": "insumo_id",
+      "value": "",
+      "description": "ID do insumo"
+    }
+  ]
+}

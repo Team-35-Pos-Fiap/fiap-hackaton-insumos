@@ -1,3 +1,28 @@
 spring:
   application:
-    name: fiap-hackaton-insumos
+    name: insumos
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:insumos;DB_CLOSE_DELAY=-1;AUTO_RECONNECT=TRUE;MODE=MySQL;
+    username: admin
+    password: 1234
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+    defer-datasource-initialization: true
+    show-sql: true
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      enabled: true
+  messages:
+    encoding: ISO-8859-1
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+server:
+  servlet:
+    context-path: /insumos
