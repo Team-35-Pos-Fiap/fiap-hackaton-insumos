@@ -8,6 +8,6 @@ RUN mvn clean install
 
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
-EXPOSE 8080
-COPY --from=builder /app/target/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8088
+COPY --from=builder /app/target/*.jar insumos.jar
+ENTRYPOINT ["java", "-jar", "insumos.jar"]

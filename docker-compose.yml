@@ -1,9 +1,0 @@
-services:
-
-  app:
-    container_name: insumos
-    build: .
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS: true
