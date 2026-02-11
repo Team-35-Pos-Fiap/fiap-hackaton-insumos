@@ -27,6 +27,7 @@ spring:
 server:
   servlet:
     context-path: /insumos
+  port: 0
 
 eureka:
   client:
